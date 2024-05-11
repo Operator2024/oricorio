@@ -1,3 +1,4 @@
+---
 version: "3.0"
 services:
   wg-easy:
@@ -23,11 +24,11 @@ services:
       # - WG_PRE_DOWN=echo "Pre Down" > /etc/wireguard/pre-down.txt
       # - WG_POST_DOWN=echo "Post Down" > /etc/wireguard/post-down.txt
       - UI_TRAFFIC_STATS=true
-      - UI_CHART_TYPE=3 # (0 Charts disabled, 1 # Line chart, 2 # Area chart, 3 # Bar chart)
+      - UI_CHART_TYPE=3  # (0 Charts disabled, 1 # Line chart, 2 # Area chart, 3 # Bar chart)
 
     build:
-      dockerfile: ${HOME}/Dockerfile
-      args: 
+      dockerfile: ${PWD}/Dockerfile
+      args:
         version: ${IMAGE_VERSION}
       context: /
     image: custom-wg-easy:${IMAGE_VERSION}
@@ -54,7 +55,7 @@ networks:
       driver: default
       config:
         - subnet: "172.16.238.0/24"
-        # - subnet: "2001:3984:3989::/64"
+          # - subnet: "2001:3984:3989::/64"
           gateway: "172.16.238.1"
 
 volumes:
