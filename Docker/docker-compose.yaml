@@ -38,7 +38,6 @@ services:
       local-network:
         ipv4_address: 172.16.238.5
     ports:
-      - '172.16.238.1:${WG_PORT_EXT}:${WG_PORT_INT}/udp'
       - '172.16.238.1:${WEB_PORT}:${WEB_PORT}/tcp'
     restart: unless-stopped
     cap_add:
