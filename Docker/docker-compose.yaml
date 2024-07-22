@@ -5,11 +5,13 @@ services:
     # build:
     #   dockerfile: ${PWD}/Dockerfile
     #   context: /
+    environment:
+      - 'WG_PORT_PROXY=${WG_PORT}'
     image: nginx:1.27-alpine
     ports:
       - '80:80'
       # - '443:443'
-      - '51820:51819/udp'
+      - '${WG_PORT}:51819/udp'
     volumes:
       - '../nginx.conf:/etc/nginx/nginx.conf'
     networks:
