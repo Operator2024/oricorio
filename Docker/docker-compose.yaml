@@ -33,7 +33,7 @@ services:
       - WG_PERSISTENT_KEEPALIVE=25
       - UI_TRAFFIC_STATS=true
       - UI_CHART_TYPE=3
-    image: 'ghcr.io/wg-easy/wg-easy:12'
+    image: 'ghcr.io/wg-easy/wg-easy:13'
     container_name: wg-easy
     volumes:
       - '/etc/wireguard:/etc/wireguard'
