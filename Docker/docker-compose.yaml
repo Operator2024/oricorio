@@ -2,12 +2,14 @@
 version: '3.0'
 services:
   nginx:
-    # build:
-    #   dockerfile: ${PWD}/Dockerfile
-    #   context: /
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+      args:
+        ENABLED_MODULES: headers-more
     environment:
       - 'WG_PORT_PROXY=${WG_PORT}'
-    image: nginx:1.27-alpine
+    image: nginx-hm:1.27-alpine
     ports:
       - '80:80'
       # - '443:443'
@@ -20,6 +22,8 @@ services:
         ipv4_address: 172.16.238.4
     depends_on:
       - wg_easy
+    restart: unless-stopped
+
   wg_easy:
     environment:
       - LANG=en
@@ -31,9 +35,10 @@ services:
       - WG_DEFAULT_DNS=1.1.1.1
       - WG_MTU=1420
       - WG_PERSISTENT_KEEPALIVE=25
+      # - WG_ALLOWED_IPS=10.16.0.0/24
       - UI_TRAFFIC_STATS=true
       - UI_CHART_TYPE=3
-    image: 'ghcr.io/wg-easy/wg-easy:13'
+    image: 'ghcr.io/wg-easy/wg-easy:13@sha256:24eddefd4e5ae2cff930d4f9254f018d5f4cdd48daf559e7a73a14da6a9fbbb4'
     container_name: wg-easy
     volumes:
       - '/etc/wireguard:/etc/wireguard'
