@@ -1,0 +1,58 @@
+---
+name: Docker build container (test only)
+
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches-ignore:
+#       - master
+#     paths:
+#       - Docker/*.*
+#       - CI/*.yaml
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - develop
+    paths-ignore:
+      - CI/*.yaml
+
+
+
+env:
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+  PLATFORMS: linux/amd64, linux/arm64/v8
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'Operator2024'
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      # - shell: bash
+      #   name: Create wg0 configuration file
+      #   run: |
+      #     sudo mkdir -p ./Docker/etc/wireguard
+      #     sudo touch ./Docker/etc/wireguard/wg0.json
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: ${{ matrix.platform }}
+
+      - name: Build and Test Docker
+        run: docker compose up -f ./Docker/docker-compose.yaml -d; sleep 15; docker-compose down -f ./Docker/docker-compose.yaml
