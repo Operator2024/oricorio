@@ -23,7 +23,8 @@ on:
 env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  PLATFORMS: linux/amd64, linux/arm64/v8
+  PLATFORMS: linux/amd64
+  # linux/arm64/v8
 
 jobs:
   build:
@@ -36,7 +37,7 @@ jobs:
       matrix:
         platform:
           - linux/amd64
-          - linux/arm64
+          # - linux/arm64
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -55,4 +56,4 @@ jobs:
           platforms: ${{ matrix.platform }}
 
       - name: Build and Test Docker
-        run: docker compose up -f ./Docker/docker-compose.yaml -d; sleep 15; docker-compose down -f ./Docker/docker-compose.yaml
+        run: docker compose -f ./Docker/docker-compose.yaml up  -d; sleep 15; docker compose -f ./Docker/docker-compose.yaml down
