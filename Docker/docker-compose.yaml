@@ -1,46 +1,52 @@
 ---
-version: "3.0"
+version: '3.0'
 services:
-  wg-easy:
+  nginx:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+      args:
+        ENABLED_MODULES: headers-more
     environment:
-      # Change Language:
-      # (Supports: en, ua, ru, tr, no, pl, fr, de, ca, es, ko, vi, nl, is, pt, chs, cht, it, th, hi)
-      - LANG=en
-      # ⚠️ Required:
-      # Change this to your host's public address
-      - WG_HOST=${WG_HOST}
+      - 'WG_PORT_PROXY=${WG_PORT}'
+    image: nginx-hm:1.27-alpine
+    ports:
+      - '80:80'
+      # - '443:443'
+      - '${WG_PORT}:51819/udp'
+    volumes:
+      - '../nginx.conf:/etc/nginx/nginx.conf'
+      - '../templates:/etc/nginx/templates/'
+    networks:
+      local-network:
+        ipv4_address: 172.16.238.4
+    depends_on:
+      - wg_easy
+    restart: unless-stopped
 
-      # Optional:
-      - PASSWORD=
-      - PORT=${PORT}
-      - WG_PORT=${WG_PORT}
+  wg_easy:
+    environment:
+      - LANG=en
+      - 'WG_HOST=${WG_HOST}'
+      - PASSWORD=${PASSWORD}
+      - 'PORT=${WEB_PORT}'
+      - 'WG_PORT=${WG_PORT}'
       - WG_DEFAULT_ADDRESS=10.16.0.x
       - WG_DEFAULT_DNS=1.1.1.1
       - WG_MTU=1420
-      # - WG_ALLOWED_IPS=192.168.15.0/24, 10.0.1.0/24
       - WG_PERSISTENT_KEEPALIVE=25
-      # - WG_PRE_UP=echo "Pre Up" > /etc/wireguard/pre-up.txt
-      # - WG_POST_UP=echo "Post Up" > /etc/wireguard/post-up.txt
-      # - WG_PRE_DOWN=echo "Pre Down" > /etc/wireguard/pre-down.txt
-      # - WG_POST_DOWN=echo "Post Down" > /etc/wireguard/post-down.txt
+      # - WG_ALLOWED_IPS=10.16.0.0/24
       - UI_TRAFFIC_STATS=true
-      - UI_CHART_TYPE=3  # (0 Charts disabled, 1 # Line chart, 2 # Area chart, 3 # Bar chart)
-
-    build:
-      dockerfile: ${PWD}/Dockerfile
-      args:
-        version: ${IMAGE_VERSION}
-      context: /
-    image: custom-wg-easy:${IMAGE_VERSION}
+      - UI_CHART_TYPE=3
+    image: 'ghcr.io/wg-easy/wg-easy:13@sha256:24eddefd4e5ae2cff930d4f9254f018d5f4cdd48daf559e7a73a14da6a9fbbb4'
     container_name: wg-easy
     volumes:
-      - etc_wireguard:/etc/wireguard
+      - '/etc/wireguard:/etc/wireguard'
     networks:
       local-network:
         ipv4_address: 172.16.238.5
     ports:
-      - "${WG_PORT}:${WG_PORT}/udp"
-      - "${PORT}:${PORT}/tcp"
+      - '172.16.238.1:${WEB_PORT}:${WEB_PORT}/tcp'
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
@@ -54,9 +60,8 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: "172.16.238.0/24"
-          # - subnet: "2001:3984:3989::/64"
-          gateway: "172.16.238.1"
+        - subnet: 172.16.238.0/24
+          gateway: 172.16.238.1
 
 volumes:
   etc_wireguard:

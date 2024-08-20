@@ -24,3 +24,5 @@ vendor/pkg/
 pyenv
 Vagrantfile
 private
+Dockerfile
+settings.json
