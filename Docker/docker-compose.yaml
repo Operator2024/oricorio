@@ -9,14 +9,16 @@ services:
         ENABLED_MODULES: headers-more
     environment:
       - 'WG_PORT_PROXY=${WG_PORT}'
+      - 'NGINX_DOMAIN=${DOMAIN}'
     image: nginx-hm:1.27-alpine
     ports:
       - '80:80'
-      # - '443:443'
+      - '443:443'
       - '${WG_PORT}:51819/udp'
     volumes:
       - '../nginx.conf:/etc/nginx/nginx.conf'
       - '../templates:/etc/nginx/templates/'
+      - '../certs:/etc/nginx/ssl/'
     networks:
       local-network:
         ipv4_address: 172.16.238.4
@@ -65,11 +67,3 @@ networks:
 
 volumes:
   etc_wireguard:
-
-# volumes:
-#   grafana-storage:
-#     name: "grafana-storage"
-#     external: true
-#   grafana-config:
-#     name: "grafana-config"
-#     external: true
