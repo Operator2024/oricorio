@@ -1,5 +1,5 @@
-ARG NGINX_FROM_IMAGE=nginx:1.27-alpine
-FROM ${NGINX_FROM_IMAGE} as builder
+ARG NGINX_FROM_IMAGE=nginx:1.27-alpine@sha256:208b70eefac13ee9be00e486f79c695b15cef861c680527171a27d253d834be9
+FROM ${NGINX_FROM_IMAGE} AS builder
 
 ARG ENABLED_MODULES
 
@@ -15,11 +15,11 @@ COPY ./ /modules/
 RUN apk update \
     && apk add linux-headers openssl-dev pcre2-dev zlib-dev openssl abuild \
                musl-dev libxslt libxml2-utils make mercurial gcc unzip git \
-               xz g++ coreutils \
+               xz g++ coreutils curl \
     # allow abuild as a root user \
     && printf "#!/bin/sh\\nSETFATTR=true /usr/bin/abuild -F \"\$@\"\\n" > /usr/local/bin/abuild \
     && chmod +x /usr/local/bin/abuild \
-    && hg clone -r ${NGINX_VERSION}-${PKG_RELEASE} https://hg.nginx.org/pkg-oss/ \
+    && git clone -b ${NGINX_VERSION}-${PKG_RELEASE} https://github.com/nginx/pkg-oss/ \
     && cd pkg-oss \
     && mkdir /tmp/packages \
     && for module in $ENABLED_MODULES; do \
