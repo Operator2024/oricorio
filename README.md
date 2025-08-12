@@ -13,6 +13,18 @@
 ---
 <div align="center">
 
-![Static Badge](https://img.shields.io/badge/version-1.0-lightgreen?style=flat)
+![Static Badge](https://img.shields.io/badge/version-1.0.1-lightgreen?style=flat)
 
 </div>
+
+---
+<div>
+&nbsp
+</div>
+
+## How it works
+
+1. Clone this repository
+2. Set your values for variables in the **.env** file.
+3. Run - **docker-compose up -d**
+4. Run - **docker ps** (for check status)
