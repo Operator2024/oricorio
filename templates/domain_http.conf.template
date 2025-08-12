@@ -24,8 +24,8 @@
             # proxy_cache_valid    404         10m;
 
             # Uncomment the following line if needed;
-            # allow %INSERT_YOU_IPS%;
-            # deny all;
+            allow $ALLOWED_NGINX_IPS;
+            deny all;
         }
 
         # include prometheus config

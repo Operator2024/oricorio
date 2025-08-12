@@ -8,8 +8,9 @@ services:
       args:
         ENABLED_MODULES: headers-more
     environment:
-      - 'WG_PORT_PROXY=${WG_PORT}'
-      - 'NGINX_DOMAIN=${NGINX_DOMAIN}'
+      - WG_PORT_PROXY=${WG_PORT}
+      - NGINX_DOMAIN=${NGINX_DOMAIN}
+      - ALLOWED_NGINX_IPS=${ALLOWED_NGINX_IPS}
     image: nginx-hm:1.27-alpine
     ports:
       - '80:80/tcp'
@@ -40,7 +41,7 @@ services:
       - WG_ALLOWED_IPS=${WG_ALLOWED_IPS}
       - UI_TRAFFIC_STATS=${WG_UI_TRAFFIC_STATS}
       - UI_CHART_TYPE=3
-    image: 'ghcr.io/wg-easy/wg-easy:14'
+    image: 'ghcr.io/wg-easy/wg-easy:14@sha256:5f26407fd2ede54df76d63304ef184576a6c1bb73f934a58a11abdd852fab549'
     container_name: wg-easy
     volumes:
       - '/etc/wireguard:/etc/wireguard'
