@@ -22,11 +22,11 @@ groups:
 system_info:
   distro: ubuntu
   default_user:
-    name: ubuntu
+    name: oricorio
     gecos: Default (ubuntu user)
-    # passwd: $6$w/HjOZlmeVGZ9GbC$cYqBM9POpFhxlg4n.eKUpidxkgf5RQ1XNS/hNdXt3GSKhNZNuLA6UYBph2k6Eo4OgQffSI5CitQS.2c3r2G0y/
+    # mkpasswd --method=SHA-512 --rounds=4096
+    passwd: $6$rounds=4096$BJsgS8j5q3UcqoOI$wcwUucZeeitef..i5EKwXKK/haawgdTgpZKiczxvw1JPNED5otLShw2NeUHtslDdRIb88t5B8I3I1ESC3Z5Lx1
     # plain_text_passwd: changepass
-    plain_text_passwd: changepass
     sudo: ALL=(ALL) NOPASSWD:ALL
     groups: [users, docker]
     shell: /bin/bash
@@ -111,6 +111,7 @@ apt:
 
 package_update: true
 packages:
+  - whois
   - wget
   - tree
   - apt-transport-https
@@ -143,8 +144,8 @@ runcmd:
   - apt-get update
   - apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose docker-compose-plugin docker-buildx-plugin
   - update-grub
-  - mkdir /home/ubuntu/app
-  - git clone https://github.com/Operator2024/wireguard-vpn.git /home/ubuntu/app
-  - chown -R ubuntu:ubuntu /home/ubuntu/app
+  - mkdir /home/oricorio/app
+  - git clone https://github.com/Operator2024/wireguard-vpn.git /home/oricorio/app
+  - chown -R oricorio:oricorio /home/oricorio/app
 
 final_message: "The system is finally up, after $UPTIME seconds"
