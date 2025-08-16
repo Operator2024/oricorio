@@ -10,6 +10,11 @@ cloud_config_modules:
 # cloud_final_modules:
 #   - apt-configure
 
+# uncomment if you need to set fqdn
+manage_etc_hosts: true
+# fqdn: netes-master1.example.org
+# hostname: netes-master1
+
 output: {all: "| tee -a /var/log/cloud-init.log"}
 
 ssh_pwauth: true
@@ -135,6 +140,7 @@ packages:
   - curl
   - gnupg
   - lsb-release
+  - bash-completion
 
 runcmd:
   - sudo systemctl restart systemd-resolved.service
