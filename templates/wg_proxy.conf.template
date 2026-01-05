@@ -10,7 +10,7 @@ stream {
     }
     server {
         #access_log /var/log/nginx/access.log combined;
-        listen     51819 udp;
+        listen      51819 udp reuseport;
         #UDP traffic will be forwarded to the specified server
         proxy_pass wg_udp_server;
         proxy_timeout 120s;

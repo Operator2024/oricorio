@@ -1,6 +1,6 @@
     server {
         access_log /var/log/nginx/access.log combined buffer=16k;
-        listen       80;
+        listen       80 reuseport;
         server_name $NGINX_DOMAIN;
 
         location = / {

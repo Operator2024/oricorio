@@ -1,6 +1,6 @@
     server {
         access_log /var/log/nginx/access.log combined buffer=16k;
-        listen       443 ssl;
+        listen       443 ssl reuseport;
         http2        on;
         server_name $NGINX_DOMAIN;
 
