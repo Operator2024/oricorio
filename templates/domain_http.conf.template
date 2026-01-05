@@ -1,5 +1,5 @@
     server {
-        access_log /var/log/nginx/access.log combined;
+        access_log /var/log/nginx/access.log combined buffer=16k;
         listen       80;
         server_name $NGINX_DOMAIN;
 
