@@ -3,7 +3,7 @@ stream {
                      '$protocol $status $bytes_sent $bytes_received '
                      '$session_time';
 
-    access_log  /var/log/nginx/access.log basic buffer=16k;
+    access_log  /var/log/nginx/access_udp.log basic buffer=16k flush=1m;
 
     upstream wg_udp_server {
         server wg_easy:$WG_PORT_PROXY max_conns=200;
